@@ -15,8 +15,8 @@ A demo application with Java, Go, Javascript, Kafka and PostgresQL.
 ## Run the demo application in Okteto
 
 ```
-$ git clone https://github.com/okteto/microservices-demo
-$ cd microservices-demo
+$ git clone https://github.com/okteto/microservices-demo-compose
+$ cd microservices-demo-compose
 $ okteto login
 $ okteto deploy
 ```
