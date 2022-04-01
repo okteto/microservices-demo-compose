@@ -1,21 +1,16 @@
-version: '2'
-
-networks:
-  app-tier:
-    driver: bridge
+name: compose
 
 services:
 
   result:
     build:
       context: result
-    networks:
-      - app-tier
     ports:
       - 4000:4000
     command: nodemon server.js
     depends_on:
       - postgresql
+      - kafka
     volumes:
       - result:/app
 
@@ -23,20 +18,17 @@ services:
     build:
       context: vote
     command: mvnw spring-boot:run
-    networks:
-      - app-tier
     ports:
       - 8080:8080
     depends_on:
       - postgresql
+      - kafka
     volumes:
       - vote:/app
 
   worker:
     build:
       context: worker
-    networks:
-      - app-tier
     depends_on:
       - postgresql
 
@@ -46,8 +38,6 @@ services:
       - POSTGRES_PASSWORD=okteto
       - POSTGRES_USER=okteto
       - POSTGRES_DB=votes
-    networks:
-      - app-tier
     ports:
       - 5432
 
@@ -55,19 +45,20 @@ services:
     image: docker.io/bitnami/zookeeper:3.8
     ports:
       - "2181:2181"
-    networks:
-      - app-tier
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
     image: docker.io/bitnami/kafka:3.1
     ports:
-      - "9092:9092"
-    networks:
-      - app-tier
+      - '9092:9092'
+      - '9093:9093'
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
