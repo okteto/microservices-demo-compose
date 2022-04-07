@@ -1,5 +1,3 @@
-name: microsrvice-demo-compose
-
 services:
 
   result:
@@ -17,9 +15,10 @@ services:
   vote:
     build:
       context: vote
-    command: mvnw spring-boot:run
+    command: ./mvnw spring-boot:run
     ports:
       - 8080:8080
+      - 5005:5005
     depends_on:
       - postgresql
       - kafka
