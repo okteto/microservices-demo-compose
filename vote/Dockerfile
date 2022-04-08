@@ -1,10 +1,10 @@
-FROM openjdk:11
+FROM maven:3.8.1-jdk-11
 
 WORKDIR /app
-COPY . ./ 
-RUN sed -i 's/\r$//' ./mvnw && chmod 700 ./mvnw && ./mvnw clean package
-RUN cp ./target/*.jar sanity.jar
+COPY . .
+RUN mvn clean package
+RUN cp ./target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/sanity.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
