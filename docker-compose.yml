@@ -15,7 +15,7 @@ services:
   vote:
     build:
       context: vote
-    command: ./mvnw spring-boot:run
+    command: mvn spring-boot:run
     ports:
       - 8080:8080
       - 5005:5005
