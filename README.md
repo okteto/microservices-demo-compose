@@ -12,33 +12,41 @@ A demo application with Java, Go, Javascript, Kafka and PostgresQL.
 * A [PostgresQL](https://bitnami.com/stack/postgresql/helm) database
 * A [Node.js](/result) webapp which shows the results of the voting in real time
 
-## Run the demo application in Okteto
+
+## How to develop on hybrid mode?
+
+Hybrid development is very interesting when we need to develop in a realistic 
+environment without being able to deploy some services in the cluster either 
+for security or cluster limitations.
+First of all we are going to clone this repo and login into okteto cloud
 
 ```
 $ git clone https://github.com/okteto/microservices-demo-compose
 $ cd microservices-demo-compose
-$ okteto login
-$ okteto deploy
+$ okteto ctx
 ```
 
-## Develop on the Result microservice
+### Run some services on local via docker compose
+
+Let's create some services locally from docker compose. We'll use the detached 
+mode on docker compose flag and partial deployment feature from them
 
 ```
-$ okteto up -f result/okteto.yml
+$ docker compose up -d worker postgresql zookeeper kafka 
 ```
 
-## Develop on the Vote microservice
+
+## Develop on Okteto cloud
+
+okteto will ignore all services that have the label `dev.okteto.com/runtime: docker` so it will deploy and put in development mode those that do not.
 
 ```
-$ okteto up -f vote/okteto.yml
+$ okteto up --detach
 ```
 
-## Develop on the Worker microservice
-
-```
-$ okteto up -f worker/okteto.yml
-$ make start
-```
+It will create a tunnel from local to the cluster for all the exposed ports of the services with the above
+ proposed label and another tunnel from the cluster to local with the services deployed in the cluster, 
+ allowing access from both localhost and the endpoint provided by okteto.
 
 ## Notes
 
