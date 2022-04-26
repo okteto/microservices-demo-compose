@@ -10,7 +10,7 @@ services:
       - postgresql
       - kafka
     volumes:
-      - .result:/app
+      - ./result:/app
 
   vote:
     build:
@@ -23,7 +23,7 @@ services:
       - postgresql
       - kafka
     volumes:
-      - .vote:/app
+      - ./vote:/app
 
   worker:
     labels:
