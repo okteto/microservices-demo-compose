@@ -8,7 +8,6 @@ services:
     command: nodemon server.js
     depends_on:
       - postgresql
-      - kafka
     volumes:
       - result:/app
 
@@ -20,7 +19,6 @@ services:
       - 8080:8080
       - 5005:5005
     depends_on:
-      - postgresql
       - kafka
     volumes:
       - vote:/app
@@ -40,6 +38,8 @@ services:
       - POSTGRES_DB=votes
     ports:
       - 5432
+    volumes:
+      - /var/lib/postgresql
 
   zookeeper:
     image: docker.io/bitnami/zookeeper:3.8
