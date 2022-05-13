@@ -1,5 +1,5 @@
 name: worker
-image: okteto.dev/worker:dev
+image: okteto/golang:1
 command: bash
 securityContext:
   capabilities:
