@@ -1,0 +1,22 @@
+name: modernized-voting-app
+
+build:
+  vote:
+    context: vote
+  result:
+    context: result
+  worker:
+    context: worker
+
+deploy:
+  compose: docker-compose.yml
+
+test:
+  integration:
+    image: curlimages/curl:8.5.0
+    commands:
+      - echo "Testing vote service..."
+      - curl -f http://vote:8080 || exit 1
+      - echo "Testing result service..."
+      - curl -f http://result:4000 || exit 1
+      - echo "All services are healthy!"
