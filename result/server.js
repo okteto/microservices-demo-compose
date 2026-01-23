@@ -8,13 +8,13 @@ var express = require('express'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
-
-io.set('transports', ['polling']);
+    io = require('socket.io')(server, {
+      transports: ['polling']
+    });
 
 var port = process.env.PORT || 4000;
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
 
   socket.emit('message', { text : 'Welcome!' });
 
@@ -52,7 +52,7 @@ function getVotes(client) {
       console.error("Error performing query: " + err);
     } else {
       var votes = collectVotesFromResult(result);
-      io.sockets.emit("scores", JSON.stringify(votes));
+      io.emit("scores", JSON.stringify(votes));
     }
 
     setTimeout(function() {getVotes(client) }, 1000);

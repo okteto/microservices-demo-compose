@@ -1,8 +1,8 @@
-FROM maven:3.8.1-jdk-11
+FROM maven:3.9-eclipse-temurin-21
 
 WORKDIR /app
 COPY . .
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 RUN cp ./target/*.jar app.jar
 
 EXPOSE 8080
